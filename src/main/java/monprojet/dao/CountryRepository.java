@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import monprojet.entity.City;
 import monprojet.entity.Country;
+import monprojet.dao.Projection;
 
 // This will be AUTO IMPLEMENTED by Spring 
 
@@ -19,5 +20,7 @@ public interface CountryRepository extends JpaRepository<Country, Integer> {
 
     @Query(value="SELECT Country.name, Sum(City.population)"
             +"FROM Country"
-            +"INNER JOIN")
+            +"INNER JOIN City ON Country.id=City.country_id"
+            + "Group by Country.name", nativeQuery = true)
+    public List<Projection> popParPays();
 }
