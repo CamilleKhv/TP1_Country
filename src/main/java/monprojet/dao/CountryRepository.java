@@ -12,15 +12,14 @@ import monprojet.dao.Projection;
 // This will be AUTO IMPLEMENTED by Spring 
 
 public interface CountryRepository extends JpaRepository<Country, Integer> {
-    @Query(value="SELECT SUM(City.population) as nbPop"
-            +"FROM Country"
-            +"Inner join City On Country.id=City.country_id"
-            +"WHERE City.country_id = :codePays", nativeQuery = true)
+    @Query(value="SELECT SUM(population)"
+            +"FROM City"
+            +"WHERE country_id = :codePays", nativeQuery = true)
     public Integer idPopulation (Integer codePays);
 
-    @Query(value="SELECT Country.name, Sum(City.population)"
+    @Query(value="SELECT Country.name as name, Sum(City.population) as population"
             +"FROM Country"
             +"INNER JOIN City ON Country.id=City.country_id"
-            + "Group by Country.name", nativeQuery = true)
-    public List<Projection> popParPays();
+            + "Group by Country.name, Country.id", nativeQuery = true)
+    public List<Projection> populationParPays();
 }
